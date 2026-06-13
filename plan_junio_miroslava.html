@@ -1,0 +1,827 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Plan de Estudio • Nenúfares</title>
+
+<style>
+
+:root{
+  --deep:#0A3323;
+  --water:#105666;
+  --leaf:#839958;
+  --lily:#D3968C;
+  --cream:#F7F4D5;
+
+  --shadow:0 12px 32px rgba(16,86,102,.08);
+  --radius:22px;
+}
+
+*{
+  margin:0;
+  padding:0;
+  box-sizing:border-box;
+}
+
+html{
+  scroll-behavior:smooth;
+}
+
+body{
+  font-family:
+  Inter,
+  Segoe UI,
+  sans-serif;
+
+  background:
+  radial-gradient(
+    circle at top right,
+    rgba(211,150,140,.14),
+    transparent 30%
+  ),
+
+  radial-gradient(
+    circle at bottom left,
+    rgba(131,153,88,.15),
+    transparent 30%
+  ),
+
+  var(--cream);
+
+  color:var(--deep);
+  min-height:100vh;
+}
+
+/* decoración monet */
+
+body::before{
+  content:"";
+  position:fixed;
+  inset:0;
+
+  background:
+  linear-gradient(
+    transparent,
+    rgba(255,255,255,.25)
+  );
+
+  pointer-events:none;
+}
+
+.container{
+  width:min(1200px,92%);
+  margin:auto;
+  padding:40px 0 80px;
+}
+
+.header{
+  margin-bottom:30px;
+}
+
+.badge{
+  display:inline-block;
+
+  background:white;
+
+  color:var(--water);
+
+  border-radius:999px;
+
+  padding:8px 16px;
+
+  font-size:.8rem;
+
+  letter-spacing:.08em;
+
+  text-transform:uppercase;
+
+  box-shadow:var(--shadow);
+
+  margin-bottom:14px;
+}
+
+.title{
+  font-size:clamp(2rem,4vw,3.4rem);
+
+  font-weight:700;
+
+  line-height:1.1;
+
+  color:var(--deep);
+}
+
+.subtitle{
+  margin-top:12px;
+
+  max-width:700px;
+
+  line-height:1.8;
+
+  color:#54665f;
+}
+
+/* progreso */
+
+.progress-card{
+
+  background:
+  rgba(255,255,255,.82);
+
+  backdrop-filter:blur(12px);
+
+  border-radius:28px;
+
+  padding:28px;
+
+  box-shadow:var(--shadow);
+
+  margin-bottom:40px;
+}
+
+.progress-head{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+
+  margin-bottom:14px;
+}
+
+.progress-head span{
+  color:var(--water);
+  font-weight:600;
+}
+
+.progress-track{
+  height:12px;
+  overflow:hidden;
+  border-radius:999px;
+
+  background:
+  rgba(16,86,102,.10);
+}
+
+.progress-fill{
+  width:0%;
+  height:100%;
+
+  border-radius:999px;
+
+  background:
+  linear-gradient(
+  90deg,
+  var(--water),
+  var(--leaf),
+  var(--lily)
+  );
+
+  transition:.4s ease;
+}
+
+.counter{
+  margin-top:12px;
+  color:#66766f;
+}
+
+/* semanas */
+
+.week{
+  margin-bottom:50px;
+}
+
+.week-label{
+
+  font-size:.8rem;
+
+  letter-spacing:.12em;
+
+  text-transform:uppercase;
+
+  color:var(--water);
+
+  margin-bottom:10px;
+}
+
+.week-title{
+
+  font-size:1.7rem;
+
+  font-weight:700;
+
+  margin-bottom:8px;
+
+  display:flex;
+  align-items:center;
+  gap:10px;
+}
+
+.week-title::before{
+  content:"❀";
+  color:var(--lily);
+}
+
+.week-meta{
+  color:#61726b;
+  margin-bottom:18px;
+}
+
+.days-grid{
+  display:grid;
+  grid-template-columns:repeat(5,1fr);
+  gap:14px;
+}
+.day-card{
+
+  background:
+  rgba(255,255,255,.88);
+
+  backdrop-filter:blur(10px);
+
+  border:1px solid rgba(211,150,140,.18);
+
+  border-radius:
+  24px 24px 24px 12px;
+
+  min-height:180px;
+
+  padding:18px;
+
+  cursor:pointer;
+
+  transition:
+  transform .25s ease,
+  box-shadow .25s ease,
+  border-color .25s ease;
+
+  box-shadow:var(--shadow);
+
+  position:relative;
+
+  overflow:hidden;
+
+  display:flex;
+  flex-direction:column;
+}
+
+.day-card::before{
+
+  content:"";
+
+  position:absolute;
+
+  inset:0;
+
+  background:
+  linear-gradient(
+    120deg,
+    transparent,
+    rgba(255,255,255,.55),
+    transparent
+  );
+
+  transform:translateX(-120%);
+
+  transition:.8s;
+}
+
+.day-card:hover::before{
+  transform:translateX(120%);
+}
+
+.day-card:hover{
+
+  transform:
+  translateY(-5px);
+
+  border-color:var(--lily);
+
+  box-shadow:
+  0 18px 40px rgba(16,86,102,.15);
+}
+
+.day-name{
+
+  font-size:.8rem;
+
+  color:var(--water);
+
+  font-weight:700;
+
+  margin-bottom:10px;
+}
+
+.day-topic{
+
+  flex:1;
+
+  line-height:1.6;
+
+  font-size:.95rem;
+}
+
+.check{
+  display:none;
+}
+
+/* completado */
+
+.day-card.done{
+
+  background:
+  linear-gradient(
+  135deg,
+  var(--lily),
+  #e8b8b1
+  );
+
+  color:white;
+}
+
+.day-card.done .day-name,
+.day-card.done .day-topic{
+  color:white;
+}
+
+.day-card.done .check{
+  display:block;
+  margin-top:12px;
+  font-weight:700;
+}
+
+.day-card.done::after{
+
+  content:"🌸";
+
+  position:absolute;
+
+  top:12px;
+  right:12px;
+
+  font-size:1.3rem;
+}
+
+/* nota */
+
+.note{
+
+  margin-top:16px;
+
+  background:
+  rgba(255,255,255,.75);
+
+  backdrop-filter:blur(8px);
+
+  border-left:5px solid var(--lily);
+
+  border-radius:18px;
+
+  padding:18px;
+
+  box-shadow:var(--shadow);
+}
+
+.note-title{
+
+  color:var(--water);
+
+  font-weight:700;
+
+  margin-bottom:8px;
+}
+
+.note-text{
+  color:#61726b;
+  line-height:1.7;
+}
+
+.divider{
+
+  height:1px;
+
+  background:
+  rgba(16,86,102,.12);
+
+  margin:34px 0;
+}
+
+/* botón */
+
+.ask-btn{
+
+  margin-top:10px;
+
+  border:none;
+
+  background:
+  linear-gradient(
+    135deg,
+    var(--lily),
+    #c9857a
+  );
+
+  color:white;
+
+  padding:
+  14px 22px;
+
+  border-radius:999px;
+
+  font-size:.95rem;
+
+  font-weight:600;
+
+  cursor:pointer;
+
+  transition:.25s;
+
+  box-shadow:
+  0 12px 28px rgba(211,150,140,.35);
+}
+
+.ask-btn:hover{
+  transform:translateY(-3px);
+}
+
+/* responsive */
+
+@media (max-width:950px){
+
+  .days-grid{
+    grid-template-columns:repeat(2,1fr);
+  }
+}
+
+@media (max-width:640px){
+
+  .container{
+    width:94%;
+    padding-top:20px;
+  }
+
+  .days-grid{
+    grid-template-columns:1fr;
+  }
+
+  .progress-head{
+    flex-direction:column;
+    align-items:flex-start;
+    gap:8px;
+  }
+
+  .week-title{
+    font-size:1.3rem;
+  }
+
+  .day-card{
+    min-height:auto;
+  }
+
+  .ask-btn{
+    width:100%;
+  }
+}
+
+</style>
+</head>
+
+<body>
+
+<div class="container">
+
+  <div class="header">
+
+    <div class="badge">
+      Jardín de aprendizaje
+    </div>
+
+    <h1 class="title">
+      Python para Datos
+    </h1>
+
+    <p class="subtitle">
+      Un recorrido tranquilo y constante.
+      Marca cada sesión completada y observa
+      cómo florece tu progreso.
+    </p>
+
+  </div>
+
+  <div class="progress-card">
+
+      <div class="progress-head">
+          <span>Sesiones completadas</span>
+          <span id="prog-label">0 de 15</span>
+      </div>
+
+      <div class="progress-track">
+          <div
+            class="progress-fill"
+            id="prog-fill">
+          </div>
+      </div>
+
+      <div class="counter">
+        Haz clic sobre cada tarjeta al terminar.
+      </div>
+
+  </div>
+
+  <div id="weeks-container"></div>
+
+  <button class="ask-btn">
+    🌸 Practicar pandas hoy
+  </button>
+
+</div>
+
+<script>
+
+const weeks = [
+
+{
+  num:"Semana 1",
+  dates:"16 – 20 jun",
+  title:"Pandas desde cero",
+  meta:"2 horas diarias · L a V",
+
+  note:{
+    label:"Cómo usar IA esta semana",
+    text:"Practica con datos reales de ventas o inventario y genera ejercicios progresivos."
+  },
+
+  days:[
+    {
+      name:"Lun 16",
+      topic:"Series y DataFrames"
+    },
+
+    {
+      name:"Mar 17",
+      topic:"Filtros y condiciones"
+    },
+
+    {
+      name:"Mié 18",
+      topic:"Limpieza de datos"
+    },
+
+    {
+      name:"Jue 19",
+      topic:"GroupBy y agregaciones"
+    },
+
+    {
+      name:"Vie 20",
+      topic:"Proyecto CSV real"
+    }
+  ]
+},
+
+{
+  num:"Semana 2",
+  dates:"23 – 27 jun",
+  title:"Visualización y Pandas avanzado",
+  meta:"2 horas diarias · L a V",  note:{
+    label:"Cómo usar IA esta semana",
+    text:"Analiza cada gráfica y pide explicaciones para entender los patrones."
+  },
+
+  days:[
+    {
+      name:"Lun 23",
+      topic:"Merge y Join"
+    },
+
+    {
+      name:"Mar 24",
+      topic:"Pivot Tables"
+    },
+
+    {
+      name:"Mié 25",
+      topic:"Matplotlib y Seaborn"
+    },
+
+    {
+      name:"Jue 26",
+      topic:"EDA completo"
+    },
+
+    {
+      name:"Vie 27",
+      topic:"Notebook profesional"
+    }
+  ]
+},
+
+{
+  num:"Semana 3",
+  dates:"30 jun – 4 jul",
+  title:"NumPy y cierre",
+  meta:"Preparación para julio",
+
+  note:{
+    label:"Objetivo",
+    text:"Consolidar fundamentos y preparar el siguiente nivel de aprendizaje."
+  },
+
+  days:[
+    {
+      name:"Lun 30",
+      topic:"Arrays y Shapes"
+    },
+
+    {
+      name:"Mar 1",
+      topic:"Estadística con NumPy"
+    },
+
+    {
+      name:"Mié 2",
+      topic:"Repaso general"
+    },
+
+    {
+      name:"Jue 3",
+      topic:"Organizar entorno"
+    },
+
+    {
+      name:"Vie 4",
+      topic:"Diagnóstico y descanso"
+    }
+  ]
+}
+
+];
+
+const STORAGE_KEY = "water_lily_plan";
+
+const container =
+document.getElementById(
+"weeks-container"
+);
+
+let done = {};
+
+try{
+  done = JSON.parse(
+    localStorage.getItem(STORAGE_KEY)
+  ) || {};
+}
+catch(e){
+  done = {};
+}
+
+function updateProgress(){
+
+  const total = 15;
+
+  const count =
+  Object.values(done)
+  .filter(Boolean)
+  .length;
+
+  document.getElementById(
+    "prog-label"
+  ).textContent =
+  `${count} de ${total}`;
+
+  document.getElementById(
+    "prog-fill"
+  ).style.width =
+  `${(count/total)*100}%`;
+}
+
+weeks.forEach((week,wi)=>{
+
+  const block =
+  document.createElement("section");
+
+  block.className = "week";
+
+  block.innerHTML = `
+    <div class="week-label">
+      ${week.num} · ${week.dates}
+    </div>
+
+    <div class="week-title">
+      ${week.title}
+    </div>
+
+    <div class="week-meta">
+      ${week.meta}
+    </div>
+
+    <div
+      class="days-grid"
+      id="grid-${wi}">
+    </div>
+
+    <div class="note">
+      <div class="note-title">
+        ${week.note.label}
+      </div>
+
+      <div class="note-text">
+        ${week.note.text}
+      </div>
+    </div>
+
+    ${
+      wi < weeks.length - 1
+      ? '<div class="divider"></div>'
+      : ''
+    }
+  `;
+
+  container.appendChild(block);
+
+  const grid =
+  document.getElementById(
+    `grid-${wi}`
+  );
+
+  week.days.forEach((day,di)=>{
+
+    const key =
+    `${wi}-${di}`;
+
+    const card =
+    document.createElement("div");
+
+    card.className =
+    "day-card" +
+    (
+      done[key]
+      ? " done"
+      : ""
+    );
+
+    card.innerHTML = `
+      <div class="day-name">
+        ${day.name}
+      </div>
+
+      <div class="day-topic">
+        ${day.topic}
+      </div>
+
+      <div class="check">
+        ✓ Completado
+      </div>
+    `;
+
+    card.addEventListener(
+      "click",
+      ()=>{
+
+        done[key] =
+        !done[key];
+
+        card.classList.toggle(
+          "done",
+          done[key]
+        );
+
+        localStorage.setItem(
+          STORAGE_KEY,
+          JSON.stringify(done)
+        );
+
+        updateProgress();
+      }
+    );
+
+    grid.appendChild(card);
+  });
+
+});
+
+updateProgress();
+
+document
+.querySelector(".ask-btn")
+.addEventListener(
+"click",
+()=>{
+
+  alert(
+`Ejercicio sugerido:
+
+1. Carga un CSV real.
+2. Limpia valores nulos.
+3. Filtra registros relevantes.
+4. Agrupa resultados.
+5. Genera una gráfica sencilla.
+
+Intenta resolverlo antes de pedir ayuda a la IA.`
+  );
+
+});
+
+</script>
+
+</body>
+</html>
